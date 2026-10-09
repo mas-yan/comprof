@@ -52,7 +52,7 @@
             <div class="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4">
                 <a href="{{ url('/') }}" data-scroll-top class="flex items-center gap-3 font-semibold" aria-label="{{ $companyName }}">
                     @if ($profile?->logo_url)
-                        <img src="{{ $profile->logo_url }}" alt="Logo {{ $companyName }}" class="h-9 w-auto max-w-[9rem] object-contain">
+                        <img src="{{ $profile->logo_url }}" alt="Logo {{ $companyName }}" class="h-12 w-auto max-w-[10rem] object-contain">
                     @endif
                     @if ($profile?->name || ! $profile?->logo_url)
                         <span>{{ $companyName }}</span>

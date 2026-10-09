@@ -18,7 +18,7 @@ class CompanyProfileForm
                     ->schema([
                         TextInput::make('name')
                             ->label('Nama Perusahaan')
-                            ->required()
+                            ->helperText('Opsional. Jika dikosongkan, nama aplikasi akan digunakan sebagai gantinya.')
                             ->maxLength(255)
                             ->columnSpanFull(),
                         FileUpload::make('logo')

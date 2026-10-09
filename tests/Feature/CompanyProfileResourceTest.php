@@ -58,11 +58,17 @@ test('can create a company profile', function () {
     ]);
 });
 
-test('requires a name to create a company profile', function () {
+test('can create a company profile without a name', function () {
     Livewire::test(CreateCompanyProfile::class)
         ->fillForm(['name' => null])
         ->call('create')
-        ->assertHasFormErrors(['name' => 'required']);
+        ->assertHasNoFormErrors()
+        ->assertNotified()
+        ->assertRedirect();
+
+    assertDatabaseHas(CompanyProfile::class, [
+        'name' => null,
+    ]);
 });
 
 test('shows the create action when no company profile exists yet', function () {

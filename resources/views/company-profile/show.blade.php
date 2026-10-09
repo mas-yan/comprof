@@ -20,7 +20,7 @@
         {{-- Open Graph --}}
         <meta property="og:type" content="website">
         <meta property="og:locale" content="id_ID">
-        <meta property="og:site_name" content="{{ $profile->name ?? config('app.name') }}">
+        <meta property="og:site_name" content="{{ $companyName }}">
         <meta property="og:title" content="{{ $metaTitle }}">
         <meta property="og:description" content="{{ $metaDescription }}">
         <meta property="og:url" content="{{ url()->current() }}">
@@ -50,11 +50,13 @@
 
         <header data-site-header class="sticky top-0 z-30 border-b border-slate-200/70 bg-white/80 backdrop-blur transition-shadow duration-300 dark:border-slate-800/70 dark:bg-slate-950/80">
             <div class="relative mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4">
-                <a href="{{ url('/') }}" class="flex items-center gap-3 font-semibold">
+                <a href="{{ url('/') }}" data-scroll-top class="flex items-center gap-3 font-semibold" aria-label="{{ $companyName }}">
                     @if ($profile?->logo_url)
-                        <img src="{{ $profile->logo_url }}" alt="Logo {{ $profile->name }}" class="h-9 w-9 rounded-full object-cover ring-2 ring-slate-100 dark:ring-slate-800" width="36" height="36">
+                        <img src="{{ $profile->logo_url }}" alt="Logo {{ $companyName }}" class="h-9 w-auto max-w-[9rem] object-contain">
                     @endif
-                    <span>{{ $profile->name ?? config('app.name') }}</span>
+                    @if ($profile?->name || ! $profile?->logo_url)
+                        <span>{{ $companyName }}</span>
+                    @endif
                 </a>
 
                 @if ($profile)
@@ -167,7 +169,7 @@
                             </span>
 
                             <h1 class="mt-6 text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
-                                <span class="text-gradient-brand">{{ $profile->name }}</span>
+                                <span class="text-gradient-brand">{{ $companyName }}</span>
                             </h1>
 
                             @if ($profile->description)
@@ -199,16 +201,16 @@
                             @if ($profile->hero_image_url)
                                 <img
                                     src="{{ $profile->hero_image_url }}"
-                                    alt="{{ $profile->name }}"
+                                    alt="{{ $companyName }}"
                                     class="aspect-[4/3] w-full rounded-3xl object-cover shadow-2xl ring-1 ring-black/5 dark:ring-white/10"
                                 >
                             @else
-                                <div class="flex aspect-[4/3] w-full items-center justify-center rounded-3xl bg-gradient-to-br from-indigo-500 to-violet-600 shadow-2xl">
+                                <div class="flex aspect-[4/3] w-full items-center justify-center rounded-3xl bg-gradient-to-br from-indigo-500 to-violet-600 p-12 shadow-2xl">
                                     @if ($profile->logo_url)
                                         <img
                                             src="{{ $profile->logo_url }}"
-                                            alt="Logo {{ $profile->name }}"
-                                            class="h-32 w-32 rounded-full object-cover ring-4 ring-white/50"
+                                            alt="Logo {{ $companyName }}"
+                                            class="max-h-28 w-full max-w-xs object-contain drop-shadow-lg sm:max-h-32"
                                         >
                                     @endif
                                 </div>
@@ -400,7 +402,7 @@
                                         >
                                             <img
                                                 src="{{ $image->image_url }}"
-                                                alt="{{ $image->caption ?: ($profile->name.' - galeri') }}"
+                                                alt="{{ $image->caption ?: ($companyName.' - galeri') }}"
                                                 loading="{{ $loop->first ? 'eager' : 'lazy' }}"
                                                 class="h-full w-full object-cover"
                                             >
@@ -737,9 +739,11 @@
                     <div class="lg:col-span-2">
                         <div class="mb-3 flex items-center gap-3">
                             @if ($profile?->logo_url)
-                                <img src="{{ $profile->logo_url }}" alt="Logo {{ $profile->name }}" class="h-9 w-9 rounded-full object-cover">
+                                <img src="{{ $profile->logo_url }}" alt="Logo {{ $companyName }}" class="h-9 w-auto max-w-[9rem] object-contain">
                             @endif
-                            <span class="font-semibold text-white">{{ $profile->name ?? config('app.name') }}</span>
+                            @if ($profile?->name || ! $profile?->logo_url)
+                                <span class="font-semibold text-white">{{ $companyName }}</span>
+                            @endif
                         </div>
                         @if ($profile?->description)
                             <p class="max-w-sm text-sm text-slate-400">{{ Str::limit(strip_tags($profile->description), 140) }}</p>
@@ -821,7 +825,7 @@
                 </div>
 
                 <div class="mt-12 flex flex-col items-center justify-between gap-3 border-t border-slate-800 pt-6 text-xs text-slate-500 sm:flex-row">
-                    <p>&copy; {{ now()->year }} {{ $profile->name ?? config('app.name') }}. Seluruh hak cipta dilindungi.</p>
+                    <p>&copy; {{ now()->year }} {{ $companyName }}. Seluruh hak cipta dilindungi.</p>
                     <p>Dibuat dengan Laravel &amp; Filament</p>
                 </div>
             </div>

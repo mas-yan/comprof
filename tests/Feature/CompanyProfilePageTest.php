@@ -21,6 +21,15 @@ test('shows an empty state when no company profile exists', function () {
         ->assertSee('Profil perusahaan belum diisi');
 });
 
+test('falls back to the app name when the company name is left blank', function () {
+    CompanyProfile::factory()->create(['name' => null]);
+
+    $this->get('/')
+        ->assertOk()
+        ->assertSee(config('app.name'))
+        ->assertSee('<title>'.config('app.name').' - Profil Perusahaan</title>', false);
+});
+
 test('renders the company profile with seo meta tags', function () {
     $profile = CompanyProfile::factory()->create([
         'name' => 'PT Maju Jaya',

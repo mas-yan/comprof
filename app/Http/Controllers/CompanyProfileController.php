@@ -18,6 +18,8 @@ class CompanyProfileController extends Controller
     {
         $profile = CompanyProfile::latest()->first();
 
+        $companyName = $profile?->name ?: config('app.name');
+
         $galleryImages = GalleryImage::query()
             ->where('is_active', true)
             ->orderBy('sort_order')
@@ -50,29 +52,30 @@ class CompanyProfileController extends Controller
 
         return view('company-profile.show', [
             'profile' => $profile,
+            'companyName' => $companyName,
             'galleryImages' => $galleryImages,
             'services' => $services,
             'advantages' => $advantages,
             'customers' => $customers,
             'testimonials' => $testimonials,
             'faqs' => $faqs,
-            'metaTitle' => $profile ? "{$profile->name} - Profil Perusahaan" : config('app.name'),
+            'metaTitle' => $profile ? "{$companyName} - Profil Perusahaan" : config('app.name'),
             'metaDescription' => $profile?->description
                 ? Str::limit(strip_tags($profile->description), 160)
                 : 'Profil perusahaan.',
-            'jsonLd' => $profile ? $this->organizationJsonLd($profile) : null,
+            'jsonLd' => $profile ? $this->organizationJsonLd($profile, $companyName) : null,
         ]);
     }
 
     /**
      * @return array<string, mixed>
      */
-    protected function organizationJsonLd(CompanyProfile $profile): array
+    protected function organizationJsonLd(CompanyProfile $profile, string $companyName): array
     {
         return array_filter([
             '@context' => 'https://schema.org',
             '@type' => 'Organization',
-            'name' => $profile->name,
+            'name' => $companyName,
             'description' => $profile->description,
             'url' => url('/'),
             'logo' => $profile->logo_url,
